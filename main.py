@@ -4,12 +4,13 @@ from snake import *
 from food import *
 
 pygame.init()
-bounds = (300, 300)
+bounds = (500, 500)
 window = pygame.display.set_mode(bounds)
 pygame.display.set_caption("Snake")
 block_size = 20
 snake = Snake(block_size, bounds)
 food = Food(block_size, bounds)
+font = pygame.font.SysFont('comicsans', 60, True)
 
 run = True
 while run:
@@ -28,7 +29,15 @@ while run:
         snake.steer(Direction.UP)
     elif keys[pygame.K_DOWN]:
         snake.steer(Direction.DOWN)
-    snake.move()    
+    snake.move()
+    snake.check_for_food(food)
+    if snake.check_bounds() == True or snake.check_tail_collision() ==True:
+        text = font.render('Game Over', True, (255, 255, 255))
+        window.blit(text, (20,120))
+        pygame.display.update()
+        pygame.time.delay(1000)
+        snake.respawn()
+        food. respawn()
     window.fill((0, 0, 0))
     snake.draw(pygame, window)
     food.draw(pygame, window)
